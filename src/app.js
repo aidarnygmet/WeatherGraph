@@ -26,15 +26,19 @@ function init() {
             bindingX: 'date',
             chartType: chart.ChartType.LineSymbols,
             series: [
-                { binding: 'value', name: 'Astana1' }
+                { binding: 'value', name: 'Astana1' , symbolSize: 2}
             ],
             legend: { position: chart.Position.None },
             tooltip: {
                 content: (ht) => {
                     return (ht && ht.x && ht.y)
-                        ? `<b>Date:</b> ${wijmo.Globalize.formatDate(ht.x, 'hh:mm dd-MM-yyyy')}<br><b>Value:</b> ${ht.y.toFixed(2)}`
+                        ? `<b>Date:</b> ${wijmo.Globalize.formatDate(ht.x, 'hh dd-MM-yyyy')}<br><b>Value:</b> ${ht.y.toFixed(2)}`
                         : '';
                 }
+            },
+            axisX: {
+                min: response[response.length-48].date.valueOf(),// Set the minimum value of the x-axis
+                format: "hh dd.MM.yy"
             },
             plotMargin: 'NaN 60 NaN 60',
             palette: palette
@@ -42,7 +46,7 @@ function init() {
     let theChartSelector = new chart.FlexChart('#theChartSelector', {
         itemsSource: response,
         bindingX: 'date',
-        chartType: chart.ChartType.Area,
+        chartType: chart.ChartType.LineSymbols,
         legend: {
             position: chart.Position.None
         },
@@ -54,12 +58,14 @@ function init() {
         },
         tooltip: { content: '' },
         series: [
-            { binding: 'value' }
+            { binding: 'value' , symbolSize: 2}
         ],
         palette: palette
     });
     let rangeSelector = new interaction.RangeSelector(theChartSelector, {
         seamless: true,
+        min: response[response.length-48].date.valueOf(),
+        max: response[response.length-1].date.valueOf(),
         rangeChanged: (sender) => {
             theChart.beginUpdate();
             theChart.axisX.min = sender.min;
@@ -67,7 +73,7 @@ function init() {
             theChart.endUpdate();
         }
     });
-    }) 
+    })
 }
 function generateAsExcel(data) {
     try {
