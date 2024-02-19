@@ -26,23 +26,36 @@ function init() {
             bindingX: 'date',
             chartType: chart.ChartType.LineSymbols,
             series: [
-                { binding: 'value', name: 'Astana1' , symbolSize: 2}
+                { binding: 'value', name: 'Astana1', symbolSize:4, style: {
+                    strokeWidth: 2
+                }}
             ],
             legend: { position: chart.Position.None },
             tooltip: {
                 content: (ht) => {
                     return (ht && ht.x && ht.y)
-                        ? `<b>Date:</b> ${wijmo.Globalize.formatDate(ht.x, 'hh dd-MM-yyyy')}<br><b>Value:</b> ${ht.y.toFixed(2)}`
+                        ? `<b>Date:</b> ${wijmo.Globalize.formatDate(ht.x, 'HH dd-MM-yyyy')}<br><b>Value:</b> ${ht.y.toFixed(2)}`
                         : '';
                 }
             },
             axisX: {
-                min: response[response.length-48].date.valueOf(),// Set the minimum value of the x-axis
-                format: "hh dd.MM.yy"
+                min: response[response.length - 48].date.valueOf(),
+                format: "HH dd.MM.yyyy"
             },
             plotMargin: 'NaN 60 NaN 60',
             palette: palette
         });
+        // let series = new AggregateSeries();
+        // theChart.beginUpdate();
+        // series.itemsSource = response;
+        // series.chartType = chart.ChartType.LineSymbols;
+        // series.binding = 'value';
+        // series.bindingX = 'date';
+        // series.groupAggregate = wijmo.Aggregate.Avg;
+        // series.autoGroupIntervals = ['hh', 'DD', 'WW', 'MM', 'YYYY'];
+        // series.autoInterval = true;
+        // theChart.series.push(series);
+        // theChart.endUpdate();
     let theChartSelector = new chart.FlexChart('#theChartSelector', {
         itemsSource: response,
         bindingX: 'date',
